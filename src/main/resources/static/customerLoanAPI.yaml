@@ -1,0 +1,325 @@
+openapi: 3.0.1
+info:
+  title: ING Customer Loan API
+  version: 1.0.0
+servers:
+  - url: /ing/v1B/customer/loan/api
+paths:
+  '/createLoan':
+    post:
+      summary: Create a new loan
+      tags:
+        - createLoan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerLoanReq'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerLoanRes'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  '/listLoan':
+    get:
+      summary: List Loan
+      tags:
+        - listLoan
+      parameters:
+        - name: customerId
+          in: header
+          description: customer ID
+          required: true
+          schema:
+            type: string
+        - name: loanId
+          in: header
+          description: loan ID
+          required: false
+          schema:
+            type: string
+        - name: isPaid
+          in: header
+          description: is Paid (Y/N)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Listed Loans
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerLoanRes'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  '/listInstallments':
+    get:
+      summary: To list customer assets
+      tags:
+        - listInstallments
+      parameters:
+        - name: customerId
+          in: header
+          description: customer ID
+          required: true
+          schema:
+            type: string
+        - name: loanId
+          in: header
+          description: loan ID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  '/payLoan':
+    post:
+        summary: pay Loan
+        tags:
+          - payLoan
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayLoanReq'
+        responses:
+          '200':
+            description: Created
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/PayLoanRes'
+          '400':
+            description: Bad request
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '404':
+            description: Not Found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '500':
+            description: Internal Error
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    CustomerLoanReq:
+      type: object
+      properties:
+        customerId:
+          type: string
+        LoanAmount:
+          type: number
+        interestRate:
+          type: number
+        installments:
+          type: number
+          format: int
+    CustomerLoanRes:
+      properties:
+        processTerminationCode:
+          type: string
+        processTerminationMessage:
+          type: string
+        CustomerLoanT:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerLoan'
+    CustomerLoan:
+      type: object
+      properties:
+        loanId:
+          type: string
+        customerId:
+          type: string
+        loanAmount:
+          type: number
+        numberOfInstallments:
+          type: integer
+        createDate:
+          type: string
+          format: date-time
+        isPaid:
+          type: integer
+    PayLoanReq:
+      type: object
+      properties:
+        loanId:
+          type: string
+        customerId:
+          type: string
+        paidAmount:
+          type: number
+    PayLoanRes:
+      properties:
+        loanStatus:
+          type: string
+        spentAmount:
+          type: number
+        CustomerLoanT:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaidInstallments'
+    PaidInstallments:
+      type: object
+      properties:
+        loanId:
+          type: string
+        customerId:
+          type: string
+        paidAmount:
+          type: number
+        paidInstallmentOrder:
+          type: integer
+    Error:
+      type: object
+      required:
+        - code
+        - message
+        - type
+        - component
+        - application
+        - timestamp
+        - errors
+      properties:
+        code:
+          description: Error code
+          example: '403'
+          type: string
+        message:
+          description: Error description
+          example: Internal error in the service
+          type: string
+        type:
+          description: Error type
+          example: Null pointer
+          type: string
+        context:
+          description: Error context
+          example: Process query action
+          type: string
+        exception:
+          description: Exception
+          example: NullPointerException
+          type: string
+        component:
+          description: Error component
+          example: ProcessImpl
+          type: string
+        application:
+          description: Error application
+          example: Process_Backend
+          type: string
+        timestamp:
+          description: Error time
+          example: '2019-01-13T18:27:41.511Z'
+          type: string
+          format: date-time
+        errors:
+          description: Error list
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    ErrorComponent:
+      type: object
+      required:
+        - code
+      properties:
+        code:
+          description: Error code
+          example: '403'
+          type: string
+        message:
+          description: Error message
+          example: Internal error
+          type: string
+        component:
+          description: Error component
+          example: ProcessImpl
+          type: string
+        rootcase:
+          description: Error cause
+          example: NullPointerException
+          type: string
+        info:
+          description: Error information
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorInfo'
+    ErrorInfo:
+      type: object
+      properties:
+        key:
+          description: Key
+          example: key
+          type: string
+        value:
+          description: Value
+          example: value
+          type: string

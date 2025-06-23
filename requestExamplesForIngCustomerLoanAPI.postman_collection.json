@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "5ba3ad0a-46ac-41a3-bd0f-7c33d6c14b6d",
+		"name": "requestExamplesForIngCustomerLoanAPI",
+		"description": "# About this collection\n\nThis collection helps you set up contract tests to ensure that two separate systems are compatible and can communicate with one another.\n\n## **Using the collection**\n\n**Step 1:** Send the sample requests and view the response and test results.\n\n**Step 2:** Replace the sample request URLs with your desired API endpoints.\n\n**Step 3:** Customize the tests in the \"Tests\" tab if needed. Don't forget to save your changes.\n\n### Resources\n\n[Scripting in Postman](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/)\n\n[Test script examples](https://learning.postman.com/docs/writing-scripts/script-references/test-examples/)\n\n[Postman Sandbox API reference](https://learning.postman.com/docs/sending-requests/grpc/postman-sandbox-api/#writing-assertions)\n\n[Using the Collection Runner](https://learning.postman.com/docs/collections/running-collections/intro-to-collection-runs/)\n\n[  \n](https://postman.postman.co/documentation/24552533-5bead607-0197-4e1d-87d4-3160bc7631c1?entity=&branch=&version=)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "12523844"
+	},
+	"item": [
+		{
+			"name": "createLoanAPI",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "adminpass",
+						"username": "ADMIN"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"customerId\": \"customerA\",\n  \"LoanAmount\": 200,\n  \"interestRate\": 0.5,\n  \"installments\": 6\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/ing/v1B/customer/loan/api/createLoan"
+			},
+			"response": []
+		},
+		{
+			"name": "listLoansAPI",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "adminpass",
+						"username": "ADMIN"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "customerId",
+						"value": "customerA",
+						"type": "text"
+					},
+					{
+						"key": "loanId",
+						"value": "L01",
+						"type": "text"
+					},
+					{
+						"key": "isPaid",
+						"value": "N",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/ing/v1B/customer/loan/api/listLoan",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ing",
+						"v1B",
+						"customer",
+						"loan",
+						"api",
+						"listLoan"
+					],
+					"query": [
+						{
+							"key": "customerId",
+							"value": "customerA",
+							"disabled": true
+						},
+						{
+							"key": "loanId",
+							"value": "L01",
+							"disabled": true
+						},
+						{
+							"key": "isPaid",
+							"value": "N",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listInstallmentsAPI",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "adminpass",
+						"username": "ADMIN"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "customerId",
+						"value": "customerA",
+						"type": "text"
+					},
+					{
+						"key": "loanId",
+						"value": "L01",
+						"type": "text"
+					}
+				],
+				"url": "http://localhost:8080/ing/v1B/customer/loan/api/listInstallments"
+			},
+			"response": []
+		},
+		{
+			"name": "payLoanAPI",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "adminpass",
+						"username": "ADMIN"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"loanId\": \"L01\",\n  \"customerId\": \"customerA\",\n  \"paidAmount\": 200\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/ing/v1B/customer/loan/api/payLoan"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://postman-echo.com"
+		}
+	]
+}
