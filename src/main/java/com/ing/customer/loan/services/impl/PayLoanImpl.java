@@ -12,10 +12,12 @@ import com.ing.customer.loan.services.api.PayLoanApi;
 import com.ing.customer.loan.services.models.Error;
 import com.ing.customer.loan.services.models.PayLoanReq;
 import com.ing.customer.loan.services.models.PayLoanRes;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
@@ -29,6 +31,7 @@ import java.util.List;
 @Data
 @Slf4j
 @RestController
+@Service
 public class PayLoanImpl extends AuthenticatedUserDetails implements PayLoanApi {
 
 
@@ -39,6 +42,7 @@ public class PayLoanImpl extends AuthenticatedUserDetails implements PayLoanApi 
     private final LoansRepository loansRepository;
 
     private final InstallmentsRepository installmentsRepository;
+
 
     public PayLoanImpl(CustomersRepository customersRepository, LoansRepository loansRepository, InstallmentsRepository installmentsRepository) {
         this.customersRepository = customersRepository;
@@ -52,6 +56,7 @@ public class PayLoanImpl extends AuthenticatedUserDetails implements PayLoanApi 
         return date.isBefore(threeMonthsLater);
     }
 
+    @Transactional
     @Override
     public ResponseEntity<Object> payLoanPost(PayLoanReq payLoanReq) {
 

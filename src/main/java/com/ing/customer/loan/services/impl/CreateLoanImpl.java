@@ -12,11 +12,12 @@ import com.ing.customer.loan.services.api.CreateLoanApi;
 import com.ing.customer.loan.services.models.CustomerLoanReq;
 import com.ing.customer.loan.services.models.CustomerLoanRes;
 import com.ing.customer.loan.services.models.Error;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
@@ -28,6 +29,7 @@ import java.util.Date;
 @Data
 @Slf4j
 @RestController
+@Service
 public class CreateLoanImpl extends AuthenticatedUserDetails implements CreateLoanApi {
 
 
@@ -57,6 +59,7 @@ public class CreateLoanImpl extends AuthenticatedUserDetails implements CreateLo
     }
 
 
+    @Transactional
     @Override
     public ResponseEntity<Object> createLoanPost(CustomerLoanReq customerLoanReq) {
         try{
