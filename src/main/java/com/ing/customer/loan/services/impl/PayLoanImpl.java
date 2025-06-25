@@ -65,7 +65,7 @@ public class PayLoanImpl extends AuthenticatedUserDetails implements PayLoanApi 
             Customers customer = customersRepository.findByCustomerId(operatedCustomer);
             Loans customerLoan = loansRepository.findByCustomerIdAndLoanId(operatedCustomer,payLoanReq.getLoanId());
             //TODO: query only next three loan installments to make loop less items,after the tests!
-            List<LoanInstallments> notPaidInstallments = installmentsRepository.findTop3ByCustomerIdAndLoanIdAndIsPaidOrderByInstallmentOrderAsc(
+            List<LoanInstallments> notPaidInstallments = installmentsRepository.findByCustomerIdAndLoanIdAndIsPaidOrderByInstallmentOrder(
                     operatedCustomer, payLoanReq.getLoanId(), "N"
             );
 
